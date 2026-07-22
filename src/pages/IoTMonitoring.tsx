@@ -170,10 +170,33 @@ const IoTMonitoring = () => {
     return 'bg-yellow-500';
   };
 
+  const determineWaterStatus = (ph: number, tds: number, turbidity: number) => {
+    if (ph < 6.5 || ph > 8.5 || tds > 500 || turbidity > 4.0) return "critical";
+    if (ph < 6.8 || ph > 8.2 || tds > 300 || turbidity > 1.0) return "warning";
+    return "normal";
+  };
+
   const getReadingStatus = (reading: any) => {
-    if (reading.status === 'contaminated') return { label: '🔴 Contaminated', cls: 'text-red-500' };
-    if (reading.status === 'warning') return { label: '🟡 Warning', cls: 'text-yellow-500' };
-    return { label: '🟢 Normal', cls: 'text-green-500' };
+    const statusVal = reading.status || determineWaterStatus(reading.ph, reading.tds, reading.turbidity);
+
+    switch (statusVal) {
+        case "critical":
+            return {
+                label: "🔴 Critical",
+                cls: "text-red-500"
+            };
+        case "warning":
+            return {
+                label: "🟡 Warning",
+                cls: "text-yellow-500"
+            };
+        case "normal":
+        default:
+            return {
+                label: "🟢 Normal",
+                cls: "text-green-500"
+            };
+    }
   };
 
   return (

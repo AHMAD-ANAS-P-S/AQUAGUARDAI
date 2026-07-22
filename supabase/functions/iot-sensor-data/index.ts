@@ -21,11 +21,13 @@ serve(async (req) => {
     console.log('Received sensor data:', { sensor_id, ph, tds, turbidity, temperature, battery_level });
 
     // Get or create device
-    let { data: device } = await supabase
+    const { data: deviceData, error: deviceError } = await supabase
       .from('iot_devices')
       .select('*')
       .eq('sensor_id', sensor_id)
-      .single();
+      .maybeSingle();
+
+    let device = deviceData;
 
     if (!device) {
       // Create new device if doesn't exist
@@ -84,7 +86,7 @@ serve(async (req) => {
 
     // Check if alert should be triggered
     const waterStatus = determineWaterStatus(ph, tds, turbidity);
-    if (waterStatus !== 'normal' && device.village_id) {
+    if (waterStatus !== 'normal') {
       await triggerAlert(supabase, device, waterStatus, { ph, tds, turbidity, temperature });
     }
 

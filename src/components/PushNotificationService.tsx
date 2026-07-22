@@ -63,15 +63,15 @@ export const PushNotificationService = () => {
         { event: 'INSERT', schema: 'public', table: 'water_quality_readings' },
         (payload) => {
           const reading = payload.new as any;
-          if (reading.status === 'contaminated') {
+          if (reading.status === 'critical') {
             if ('Notification' in window && Notification.permission === 'granted') {
-              new Notification('⚠️ Water Contamination Detected', {
+              new Notification('⚠️ Critical Water Quality Detected', {
                 body: `Sensor ${reading.sensor_id}: Critical water quality — pH ${reading.ph?.toFixed(1)}, TDS ${reading.tds}`,
                 icon: '/icon-192x192.png',
                 tag: 'aquaguard-water',
               });
             }
-            toast.warning(`⚠️ Water Contamination Alert`, {
+            toast.warning(`⚠️ Critical Water Quality Alert`, {
               description: `Sensor ${reading.sensor_id || 'Unknown'} detected unsafe water levels`,
               duration: 8000,
             });
