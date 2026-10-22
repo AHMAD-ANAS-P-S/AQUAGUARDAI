@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { db } from "@/utils/db";
+import { sanitizeLocationName, sanitizeAlertTitle } from "@/utils/sanitizeLocation";
 
 const generatePredictionData = () => {
   const days = [];
@@ -369,7 +370,7 @@ const OfficialDashboard = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="text-sm font-medium text-foreground">{r.reporter_name}</p>
-                      <p className="text-xs text-muted-foreground">{r.villages?.name} • {r.cases_count} cases</p>
+                      <p className="text-xs text-muted-foreground">{sanitizeLocationName(r.villages?.name)} • {r.cases_count} cases</p>
                       <p className="text-xs text-muted-foreground">{Array.isArray(r.symptoms) ? r.symptoms.slice(0, 3).join(', ') : ''}</p>
                     </div>
                     <div className="text-right">

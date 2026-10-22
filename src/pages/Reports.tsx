@@ -12,6 +12,7 @@ import { Camera, Send, Upload, X, MapPin, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 import { db } from "@/utils/db";
+import { sanitizeLocationName } from "@/utils/sanitizeLocation";
 
 const Reports = () => {
   const { t } = useTranslation();
@@ -360,7 +361,7 @@ const Reports = () => {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <p className="font-medium text-foreground">{report.villages?.name}</p>
+                      <p className="font-medium text-foreground">{sanitizeLocationName(report.villages?.name)}</p>
                       <Badge variant="outline">{report.status}</Badge>
                     </div>
                     <p className="text-sm text-muted-foreground mb-1">

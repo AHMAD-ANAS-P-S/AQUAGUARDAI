@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useTranslation } from "react-i18next";
 import { db } from "@/utils/db";
+import { sanitizeLocationName, sanitizeAlertTitle, formatTDS } from "@/utils/sanitizeLocation";
 
 const ExportReports = () => {
   const { t } = useTranslation();
@@ -67,8 +68,10 @@ const ExportReports = () => {
       const csvRows = [headers.join(",")];
       for (const row of data) {
         const values = headers.map(h => {
-          if (h === "village_name") return `"${row.villages?.name || ""}"`;
-          if (h === "district") return `"${row.villages?.districts?.name || ""}"`;
+          if (h === "village_name") return `"${sanitizeLocationName(row.villages?.name) || ""}"`;
+          if (h === "district") return `"${row.villages?.districts?.name || "Chennai"}"`;
+          if (h === "title") return `"${sanitizeAlertTitle(row.title)}"`;
+          if (h === "tds") return `"${formatTDS(row.tds)}"`;
           const val = row[h];
           if (val === null || val === undefined) return "";
           if (typeof val === "object") return `"${JSON.stringify(val).replace(/"/g, '""')}"`;
@@ -127,7 +130,7 @@ const ExportReports = () => {
         tableHeaders = "<th>Date</th><th>Village</th><th>Reporter</th><th>Symptoms</th><th>Cases</th><th>Status</th>";
         tableRows = data.map(r => `<tr>
           <td>${new Date(r.created_at).toLocaleDateString()}</td>
-          <td>${r.villages?.name || "-"}</td>
+          <td>${sanitizeLocationName(r.villages?.name)}</td>
           <td>${r.reporter_name}</td>
           <td>${Array.isArray(r.symptoms) ? r.symptoms.join(", ") : r.symptoms}</td>
           <td>${r.cases_count || 0}</td>
@@ -137,19 +140,19 @@ const ExportReports = () => {
         tableHeaders = "<th>Date</th><th>Village</th><th>pH</th><th>TDS</th><th>Turbidity</th><th>Temp</th><th>Status</th>";
         tableRows = data.map(r => `<tr>
           <td>${new Date(r.created_at || r.reading_timestamp).toLocaleDateString()}</td>
-          <td>${r.villages?.name || "-"}</td>
+          <td>${sanitizeLocationName(r.villages?.name)}</td>
           <td>${r.ph ?? "-"}</td>
-          <td>${r.tds ?? "-"}</td>
+          <td>${formatTDS(r.tds)}</td>
           <td>${r.turbidity ?? "-"}</td>
-          <td>${r.temperature ?? "-"}</td>
+          <td>${r.temperature ? `${r.temperature}°C` : "-"}</td>
           <td>${r.status || "-"}</td>
         </tr>`).join("");
       } else {
         tableHeaders = "<th>Date</th><th>Village</th><th>Title</th><th>Severity</th><th>Status</th>";
         tableRows = data.map(r => `<tr>
           <td>${new Date(r.created_at).toLocaleDateString()}</td>
-          <td>${r.villages?.name || "-"}</td>
-          <td>${r.title}</td>
+          <td>${sanitizeLocationName(r.villages?.name)}</td>
+          <td>${sanitizeAlertTitle(r.title)}</td>
           <td>${r.severity}</td>
           <td>${r.status}</td>
         </tr>`).join("");

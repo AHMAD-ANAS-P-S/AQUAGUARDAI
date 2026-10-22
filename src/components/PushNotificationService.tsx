@@ -1,10 +1,13 @@
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { sanitizeAlertTitle, sanitizeAlertMessage, formatTDS, syncLocationToSupabase } from "@/utils/sanitizeLocation";
 
 // Push notification service worker registration & alert watcher
 export const PushNotificationService = () => {
   useEffect(() => {
+    syncLocationToSupabase();
+
     // Register service worker
     if ('serviceWorker' in navigator && 'Notification' in window) {
       navigator.serviceWorker.register('/sw.js').catch(() => {
@@ -28,11 +31,14 @@ export const PushNotificationService = () => {
         { event: 'INSERT', schema: 'public', table: 'alerts' },
         (payload) => {
           const alert = payload.new as any;
+          const cleanTitle = sanitizeAlertTitle(alert.title);
+          const cleanMessage = sanitizeAlertMessage(alert.message);
+
           if (alert.severity === 'critical' || alert.severity === 'high') {
             // Browser push notification
             if ('Notification' in window && Notification.permission === 'granted') {
               new Notification('🚨 AquaGuard ALERT', {
-                body: `${alert.title} — ${(alert.severity || 'low').toUpperCase()} severity detected`,
+                body: `${cleanTitle} — ${(alert.severity || 'low').toUpperCase()} severity detected`,
                 icon: '/icon-192x192.png',
                 badge: '/icon-192x192.png',
                 tag: 'aquaguard-alert',
@@ -40,8 +46,8 @@ export const PushNotificationService = () => {
             }
 
             // Toast notification
-            toast.error(`🚨 ${alert.title}`, {
-              description: alert.message?.slice(0, 100),
+            toast.error(`🚨 ${cleanTitle}`, {
+              description: cleanMessage?.slice(0, 100),
               duration: 10000,
               action: {
                 label: 'View Alerts',
@@ -64,15 +70,16 @@ export const PushNotificationService = () => {
         (payload) => {
           const reading = payload.new as any;
           if (reading.status === 'critical') {
+            const readingTds = formatTDS(reading.tds);
             if ('Notification' in window && Notification.permission === 'granted') {
               new Notification('⚠️ Critical Water Quality Detected', {
-                body: `Sensor ${reading.sensor_id}: Critical water quality — pH ${reading.ph?.toFixed(1)}, TDS ${reading.tds}`,
+                body: `Sensor ${reading.sensor_id || 'AQUAGUARD_NODE_01'}: Critical water quality — pH ${reading.ph?.toFixed(1)}, TDS ${readingTds}`,
                 icon: '/icon-192x192.png',
                 tag: 'aquaguard-water',
               });
             }
             toast.warning(`⚠️ Critical Water Quality Alert`, {
-              description: `Sensor ${reading.sensor_id || 'Unknown'} detected unsafe water levels`,
+              description: `Sensor ${reading.sensor_id || 'AQUAGUARD_NODE_01'} detected unsafe water levels (TDS: ${readingTds})`,
               duration: 8000,
             });
           }

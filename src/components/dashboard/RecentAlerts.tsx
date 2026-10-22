@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
+import { sanitizeAlertTitle, sanitizeLocationName, sanitizeAlertMessage } from "@/utils/sanitizeLocation";
 
 interface Alert {
   id: string;
@@ -133,13 +134,13 @@ export const RecentAlerts = () => {
               </div>
               <div className="flex-1 space-y-1">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="font-medium text-foreground">{alert.title}</p>
+                  <p className="font-medium text-foreground">{sanitizeAlertTitle(alert.title)}</p>
                   <Badge variant="outline" className={getSeverityColor(alert.severity)}>
                     {getSeverityLabel(alert.severity)}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{alert.villages?.name}</p>
-                <p className="text-sm text-foreground">{alert.message}</p>
+                <p className="text-sm text-muted-foreground">{sanitizeLocationName(alert.villages?.name)}</p>
+                <p className="text-sm text-foreground">{sanitizeAlertMessage(alert.message)}</p>
                 <p className="text-xs text-muted-foreground">
                   {new Date(alert.created_at).toLocaleString()}
                 </p>

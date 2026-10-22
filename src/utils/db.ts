@@ -86,16 +86,17 @@ const MOCK_DISTRICTS = [
 ];
 
 const MOCK_VILLAGES = [
-  { id: "v1", districtId: "d1", name: "Dibrugarh Town", population: 15000, waterSources: 4, cases: 42, riskScore: 85, riskLevel: "high", alerts: 2, resourcesAssigned: 5, predictionScore: 92, predictedDisease: "Cholera", mainWaterSource: "Brahmaputra Canal", latitude: 27.4728, longitude: 94.9120 },
-  { id: "v2", districtId: "d1", name: "Barbaruah", population: 8200, waterSources: 3, cases: 18, riskScore: 48, riskLevel: "medium", alerts: 1, resourcesAssigned: 2, predictionScore: 54, predictedDisease: "Diarrhea", mainWaterSource: "Community Handpump", latitude: 27.3915, longitude: 94.8872 },
-  { id: "v3", districtId: "d1", name: "Khowang", population: 6400, waterSources: 2, cases: 8, riskScore: 28, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 22, predictedDisease: "None", mainWaterSource: "Open Well", latitude: 27.2882, longitude: 94.8988 },
-  { id: "v4", districtId: "d2", name: "Jorhat Center", population: 21000, waterSources: 6, cases: 35, riskScore: 52, riskLevel: "medium", alerts: 1, resourcesAssigned: 3, predictionScore: 61, predictedDisease: "Typhoid", mainWaterSource: "Municipal Pipeline", latitude: 26.7509, longitude: 94.2037 },
-  { id: "v5", districtId: "d2", name: "Mariani", population: 11500, waterSources: 4, cases: 24, riskScore: 72, riskLevel: "high", alerts: 2, resourcesAssigned: 4, predictionScore: 81, predictedDisease: "Hepatitis A", mainWaterSource: "River Stream", latitude: 26.6667, longitude: 94.3333 },
-  { id: "v6", districtId: "d2", name: "Teok", population: 7800, waterSources: 3, cases: 6, riskScore: 19, riskLevel: "low", alerts: 0, resourcesAssigned: 0, predictionScore: 15, predictedDisease: "None", mainWaterSource: "Deep Tube Well", latitude: 26.8202, longitude: 94.4312 },
-  { id: "v7", districtId: "d3", name: "Kamalabari", population: 5200, waterSources: 2, cases: 12, riskScore: 35, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 30, predictedDisease: "None", mainWaterSource: "River Water", latitude: 26.9634, longitude: 94.0506 },
-  { id: "v8", districtId: "d3", name: "Garamur", population: 4900, waterSources: 2, cases: 9, riskScore: 22, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 18, predictedDisease: "None", mainWaterSource: "Hand Pump", latitude: 26.9535, longitude: 94.0620 },
-  { id: "v9", districtId: "d4", name: "Silchar Ward 5", population: 18500, waterSources: 5, cases: 58, riskScore: 89, riskLevel: "high", alerts: 3, resourcesAssigned: 6, predictionScore: 94, predictedDisease: "Cholera", mainWaterSource: "Pond Water", latitude: 24.8333, longitude: 92.7789 },
-  { id: "v10", districtId: "d5", name: "Tezpur Bazar", population: 14000, waterSources: 4, cases: 15, riskScore: 40, riskLevel: "medium", alerts: 0, resourcesAssigned: 2, predictionScore: 45, predictedDisease: "Dysentery", mainWaterSource: "Borewell Water", latitude: 26.6528, longitude: 92.7926 },
+  { id: "66e0b29f-2fa6-4e48-98cc-37f6b914a598", districtId: "d6", name: "Zion Matriculation.Hr.Sec.School, Sealiyur", population: 3500, waterSources: 2, cases: 4, riskScore: 94, riskLevel: "high", alerts: 1, resourcesAssigned: 2, predictionScore: 95, predictedDisease: "Water Acidity & Bacterial Contamination", mainWaterSource: "Campus Supply / Borewell", latitude: 12.9160, longitude: 80.1380, sensorId: "AQUAGUARD_NODE_01", sensorsCount: 1, state: "Tamil Nadu", district: "Chennai" },
+  { id: "v1", districtId: "d1", name: "Dibrugarh Town", population: 15000, waterSources: 4, cases: 42, riskScore: 85, riskLevel: "high", alerts: 2, resourcesAssigned: 5, predictionScore: 92, predictedDisease: "Cholera", mainWaterSource: "Brahmaputra Canal", latitude: 27.4728, longitude: 94.9120, sensorsCount: 0 },
+  { id: "v2", districtId: "d1", name: "Barbaruah", population: 8200, waterSources: 3, cases: 18, riskScore: 48, riskLevel: "medium", alerts: 1, resourcesAssigned: 2, predictionScore: 54, predictedDisease: "Diarrhea", mainWaterSource: "Community Handpump", latitude: 27.3915, longitude: 94.8872, sensorsCount: 0 },
+  { id: "v3", districtId: "d1", name: "Khowang", population: 6400, waterSources: 2, cases: 8, riskScore: 28, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 22, predictedDisease: "None", mainWaterSource: "Open Well", latitude: 27.2882, longitude: 94.8988, sensorsCount: 0 },
+  { id: "v4", districtId: "d2", name: "Jorhat Center", population: 21000, waterSources: 6, cases: 35, riskScore: 52, riskLevel: "medium", alerts: 1, resourcesAssigned: 3, predictionScore: 61, predictedDisease: "Typhoid", mainWaterSource: "Municipal Pipeline", latitude: 26.7509, longitude: 94.2037, sensorsCount: 0 },
+  { id: "v5", districtId: "d2", name: "Mariani", population: 11500, waterSources: 4, cases: 24, riskScore: 72, riskLevel: "high", alerts: 2, resourcesAssigned: 4, predictionScore: 81, predictedDisease: "Hepatitis A", mainWaterSource: "River Stream", latitude: 26.6667, longitude: 94.3333, sensorsCount: 0 },
+  { id: "v6", districtId: "d2", name: "Teok", population: 7800, waterSources: 3, cases: 6, riskScore: 19, riskLevel: "low", alerts: 0, resourcesAssigned: 0, predictionScore: 15, predictedDisease: "None", mainWaterSource: "Deep Tube Well", latitude: 26.8202, longitude: 94.4312, sensorsCount: 0 },
+  { id: "v7", districtId: "d3", name: "Kamalabari", population: 5200, waterSources: 2, cases: 12, riskScore: 35, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 30, predictedDisease: "None", mainWaterSource: "River Water", latitude: 26.9634, longitude: 94.0506, sensorsCount: 0 },
+  { id: "v8", districtId: "d3", name: "Garamur", population: 4900, waterSources: 2, cases: 9, riskScore: 22, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 18, predictedDisease: "None", mainWaterSource: "Hand Pump", latitude: 26.9535, longitude: 94.0620, sensorsCount: 0 },
+  { id: "v9", districtId: "d4", name: "Silchar Ward 5", population: 18500, waterSources: 5, cases: 58, riskScore: 89, riskLevel: "high", alerts: 3, resourcesAssigned: 6, predictionScore: 94, predictedDisease: "Cholera", mainWaterSource: "Pond Water", latitude: 24.8333, longitude: 92.7789, sensorsCount: 0 },
+  { id: "v10", districtId: "d5", name: "Tezpur Bazar", population: 14000, waterSources: 4, cases: 15, riskScore: 40, riskLevel: "medium", alerts: 0, resourcesAssigned: 2, predictionScore: 45, predictedDisease: "Dysentery", mainWaterSource: "Borewell Water", latitude: 26.6528, longitude: 92.7926, sensorsCount: 0 },
   { id: "v11", districtId: "d7", name: "Karlambakkam", population: 6000, waterSources: 3, cases: 12, riskScore: 45, riskLevel: "medium", alerts: 1, resourcesAssigned: 2, predictionScore: 50, predictedDisease: "Diarrhea", mainWaterSource: "Borewell Water", latitude: 13.1611, longitude: 79.9482 },
   { id: "v12", districtId: "d8", name: "Thiruper", population: 4500, waterSources: 2, cases: 5, riskScore: 25, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 20, predictedDisease: "None", mainWaterSource: "Community Handpump", latitude: 12.8342, longitude: 79.7036 },
   { id: "v13", districtId: "d8", name: "Andhimanam", population: 5200, waterSources: 2, cases: 8, riskScore: 30, riskLevel: "low", alerts: 0, resourcesAssigned: 1, predictionScore: 28, predictedDisease: "None", mainWaterSource: "Open Well", latitude: 12.7562, longitude: 79.8225 },
@@ -132,10 +133,21 @@ const MOCK_INTERVENTIONS = [
 ];
 
 const MOCK_SENSORS = [
-  { id: "s1", name: "IoT Sensor #1 (Dibrugarh Town)", status: "Online", battery: "92%", village: "Dibrugarh Town", pH: 7.2, turbidity: 4.8, temp: "26°C", do: "6.5 mg/L", bacterial: "12 CFU/ml" },
-  { id: "s2", name: "IoT Sensor #2 (Mariani Well)", status: "Low Battery", battery: "15%", village: "Mariani", pH: 6.1, turbidity: 8.5, temp: "28°C", do: "4.2 mg/L", bacterial: "150 CFU/ml" },
-  { id: "s3", name: "IoT Sensor #3 (Silchar Ward 5)", status: "Online", battery: "84%", village: "Silchar Ward 5", pH: 5.8, turbidity: 12.0, temp: "29°C", do: "3.8 mg/L", bacterial: "210 CFU/ml" },
-  { id: "s4", name: "IoT Sensor #4 (Tezpur Pond)", status: "Offline", battery: "0%", village: "Tezpur Bazar", pH: 7.0, turbidity: 3.2, temp: "25°C", do: "7.1 mg/L", bacterial: "4 CFU/ml" },
+  {
+    id: "fb701d70-204c-4d6b-8cb7-fa3b20fa74bb",
+    sensor_id: "AQUAGUARD_NODE_01",
+    name: "AQUAGUARD_NODE_01 (Zion Matriculation.Hr.Sec.School, Sealiyur)",
+    status: "Online",
+    battery: "100%",
+    village: "Zion Matriculation.Hr.Sec.School, Sealiyur",
+    location_name: "Zion Matriculation.Hr.Sec.School, Sealiyur",
+    pH: 3.8,
+    tds: 185,
+    turbidity: 3.0,
+    temp: "25°C",
+    do: "6.2 mg/L",
+    bacterial: "85 CFU/ml"
+  }
 ];
 
 const MOCK_CLUSTERS = [
@@ -170,19 +182,64 @@ export const db = {
       const { data, error } = await supabase.from('villages').select('*, districts(name)').order('name');
       if (error) throw error;
       
-      // Merge live database fields with fallback details
       const local = getFallback("villages", MOCK_VILLAGES);
-      return local.map(l => {
-        const dbVal = (data as any[]).find(d => d.name === l.name);
+
+      // Process database items to sanitize SRMIST -> Zion Matriculation.Hr.Sec.School, Sealiyur
+      const processedDbData = (data || []).map((d: any) => {
+        if (/SRMIST|Vadapalani/i.test(d.name) || d.id === '66e0b29f-2fa6-4e48-98cc-37f6b914a598') {
+          return {
+            ...d,
+            name: "Zion Matriculation.Hr.Sec.School, Sealiyur",
+            latitude: 12.9160,
+            longitude: 80.1380,
+            state: "Tamil Nadu",
+            district: "Chennai",
+            risk_level: d.risk_level || "low",
+            risk_score: d.risk_score ?? 15
+          };
+        }
+        return d;
+      });
+
+      // Ensure Zion school exists in the returned list
+      const hasZion = local.some(l => l.id === "66e0b29f-2fa6-4e48-98cc-37f6b914a598" || /Zion/i.test(l.name));
+      const baseList = hasZion ? local : [MOCK_VILLAGES[0], ...local];
+
+      const merged = baseList.map(l => {
+        const isTarget = l.id === "66e0b29f-2fa6-4e48-98cc-37f6b914a598" || /Zion|SRMIST/i.test(l.name);
+        const dbVal = processedDbData.find((d: any) => 
+          (isTarget && (d.id === "66e0b29f-2fa6-4e48-98cc-37f6b914a598" || /Zion|SRMIST/i.test(d.name))) || 
+          d.name === l.name
+        );
         if (dbVal) {
           return { 
             ...l, 
             ...dbVal,
-            district: dbVal.districts?.name || dbVal.district || null
+            name: isTarget ? "Zion Matriculation.Hr.Sec.School, Sealiyur" : dbVal.name,
+            latitude: isTarget ? 12.9160 : (dbVal.latitude || l.latitude),
+            longitude: isTarget ? 80.1380 : (dbVal.longitude || l.longitude),
+            district: dbVal.districts?.name || dbVal.district || l.district || null,
+            sensorsCount: isTarget ? 1 : 0
           };
         }
-        return l;
+        if (isTarget) {
+          return {
+            ...l,
+            name: "Zion Matriculation.Hr.Sec.School, Sealiyur",
+            latitude: 12.9160,
+            longitude: 80.1380,
+            district: "Chennai",
+            state: "Tamil Nadu",
+            sensorsCount: 1
+          };
+        }
+        return {
+          ...l,
+          sensorsCount: 0
+        };
       });
+
+      return merged;
     } catch {
       return getFallback("villages", MOCK_VILLAGES);
     }
@@ -273,7 +330,8 @@ export const db = {
   },
 
   getSensors: async () => {
-    return getFallback("sensors", MOCK_SENSORS);
+    saveFallback("sensors", MOCK_SENSORS);
+    return MOCK_SENSORS;
   },
 
   getSymptomClusters: async () => {

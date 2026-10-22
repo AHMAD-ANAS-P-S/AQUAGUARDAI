@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { db } from "@/utils/db";
+import { sanitizeLocationName, TARGET_LOCATION_NAME, TARGET_VILLAGE_ID, evaluateWaterRisk } from "@/utils/sanitizeLocation";
 
 const getRiskColor = (risk: string) => {
   switch (risk) {
@@ -21,20 +22,51 @@ export const RiskMap = () => {
 
   useEffect(() => {
     const fetchVillages = async () => {
+      // Get latest physical reading to evaluate Zion dynamically
+      const { data: latestTargetReading } = await supabase
+        .from("water_quality_readings")
+        .select("sensor_id, ph, turbidity, tds")
+        .or(`village_id.eq.${TARGET_VILLAGE_ID},sensor_id.eq.AQUAGUARD_NODE_01`)
+        .order("reading_timestamp", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      const targetEval = evaluateWaterRisk(
+        latestTargetReading?.ph,
+        latestTargetReading?.tds,
+        latestTargetReading?.turbidity
+      );
+
       const { data } = await supabase
         .from("villages")
         .select("*")
         .order("risk_score", { ascending: false });
       
+      let baseList: any[] = [];
       if (data && data.length > 0) {
-        setVillages(data);
+        baseList = data;
         setIsDemo(false);
       } else {
         // Use local db mock data
         const local = await db.getVillages();
-        setVillages(local.sort((a: any, b: any) => (b.riskScore || 0) - (a.riskScore || 0)).slice(0, 8));
+        baseList = local.sort((a: any, b: any) => (b.riskScore || 0) - (a.riskScore || 0)).slice(0, 8);
         setIsDemo(true);
       }
+
+      const formatted = baseList.map((v: any) => {
+        const isTarget = v.id === TARGET_VILLAGE_ID || /Zion|SRMIST/i.test(v.name);
+        if (!isTarget) return v;
+        return {
+          ...v,
+          name: TARGET_LOCATION_NAME,
+          risk_level: targetEval.riskLevel,
+          risk_score: targetEval.riskScore,
+          riskLevel: targetEval.riskLevel,
+          riskScore: targetEval.riskScore,
+        };
+      });
+
+      setVillages(formatted);
     };
 
     fetchVillages();
@@ -42,6 +74,7 @@ export const RiskMap = () => {
     const channel = supabase
       .channel("village_updates")
       .on("postgres_changes", { event: "*", schema: "public", table: "villages" }, () => fetchVillages())
+      .on("postgres_changes", { event: "*", schema: "public", table: "water_quality_readings" }, () => fetchVillages())
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
@@ -78,7 +111,7 @@ export const RiskMap = () => {
                 className="flex items-center justify-between p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <div className="flex-1">
-                  <p className="font-medium text-foreground">{village.name}</p>
+                  <p className="font-medium text-foreground">{sanitizeLocationName(village.name)}</p>
                   <p className="text-sm text-muted-foreground">{t('mapRiskScore')}: {score}/100</p>
                 </div>
                 <Badge className={getRiskColor(risk)}>

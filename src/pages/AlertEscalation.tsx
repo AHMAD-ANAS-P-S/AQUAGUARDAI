@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { sanitizeAlertTitle, sanitizeLocationName } from "@/utils/sanitizeLocation";
 import { supabase } from "@/integrations/supabase/client";
 import { Clock, CheckCircle, AlertTriangle, Phone, User } from "lucide-react";
 import { toast } from "sonner";
@@ -141,8 +142,8 @@ const AlertEscalation = () => {
                 <div key={alert.id} className="border border-border rounded-lg p-4 hover:bg-accent/50 transition-colors">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold text-foreground">{alert.title}</h4>
-                      <p className="text-sm text-muted-foreground">{alert.villages?.name}</p>
+                      <h4 className="font-semibold text-foreground">{sanitizeAlertTitle(alert.title)}</h4>
+                      <p className="text-sm text-muted-foreground">{sanitizeLocationName(alert.villages?.name)}</p>
                     </div>
                     <Badge variant={alert.severity === 'high' ? 'destructive' : 'default'}>
                       {alert.severity}
@@ -170,10 +171,10 @@ const AlertEscalation = () => {
                       </div>
                       <div>
                         <h4 className="font-semibold text-foreground">
-                          {escalation.alerts?.title}
+                          {sanitizeAlertTitle(escalation.alerts?.title)}
                         </h4>
                         <p className="text-sm text-muted-foreground">
-                          {escalation.alerts?.villages?.name}
+                          {sanitizeLocationName(escalation.alerts?.villages?.name)}
                         </p>
                       </div>
                     </div>

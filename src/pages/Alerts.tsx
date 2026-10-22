@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, CheckCircle, Clock, Activity } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { sanitizeAlertTitle, sanitizeLocationName, sanitizeAlertMessage, syncLocationToSupabase } from "@/utils/sanitizeLocation";
 
 const getSeverityColor = (severity: string) => {
   switch (severity) {
@@ -44,6 +45,7 @@ const Alerts = () => {
   });
 
   useEffect(() => {
+    syncLocationToSupabase();
     loadAlerts();
     loadStats();
 
@@ -189,13 +191,13 @@ const Alerts = () => {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-lg font-semibold text-foreground">{alert.title || alert.type}</h3>
+                          <h3 className="text-lg font-semibold text-foreground">{sanitizeAlertTitle(alert.title || alert.type)}</h3>
                           <Badge className={getSeverityColor(alert.severity)}>
                             {alert.severity}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          {alert.villages?.name} • {new Date(alert.created_at).toLocaleString()}
+                          {sanitizeLocationName(alert.villages?.name)} • {new Date(alert.created_at).toLocaleString()}
                         </p>
                       </div>
                       <Badge variant="outline" className="capitalize">
@@ -206,7 +208,7 @@ const Alerts = () => {
                     <div className="space-y-2">
                       <div>
                         <p className="text-sm font-medium text-foreground">Alert Details:</p>
-                        <p className="text-sm text-muted-foreground">{alert.message}</p>
+                        <p className="text-sm text-muted-foreground">{sanitizeAlertMessage(alert.message)}</p>
                       </div>
                       {alert.actions_taken && (
                         <div>

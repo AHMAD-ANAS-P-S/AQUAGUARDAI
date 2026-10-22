@@ -12,6 +12,7 @@ import { LanguageSelector } from "@/components/LanguageSelector";
 import { MultilingualVoiceAssistant } from "@/components/MultilingualVoiceAssistant";
 import { RealtimeNotifications } from "@/components/RealtimeNotifications";
 import { db } from "@/utils/db";
+import { sanitizeLocationName, sanitizeAlertTitle, sanitizeAlertMessage } from "@/utils/sanitizeLocation";
 
 const CommunityDashboard = () => {
   const { signOut } = useAuth();
@@ -270,12 +271,12 @@ const CommunityDashboard = () => {
               ) : recentAlerts.map(alert => (
                 <div key={alert.id} className="border border-border rounded-xl p-3 hover:bg-muted/30 transition-colors">
                   <div className="flex items-start justify-between mb-1">
-                    <h4 className="font-semibold text-foreground text-sm">{alert.title}</h4>
+                    <h4 className="font-semibold text-foreground text-sm">{sanitizeAlertTitle(alert.title)}</h4>
                     <Badge variant={alert.severity === 'high' ? 'destructive' : 'default'} className="text-xs">
                       {alert.severity}
                     </Badge>
                   </div>
-                  <p className="text-xs text-muted-foreground">{alert.villages?.name} • {alert.message?.slice(0, 60)}...</p>
+                  <p className="text-xs text-muted-foreground">{sanitizeLocationName(alert.villages?.name)} • {sanitizeAlertMessage(alert.message)?.slice(0, 60)}...</p>
                 </div>
               ))}
             </div>
@@ -298,7 +299,7 @@ const CommunityDashboard = () => {
               {myReports.map(report => (
                 <div key={report.id} className="flex items-center justify-between p-3 bg-muted/20 rounded-xl">
                   <div>
-                    <p className="text-sm font-medium text-foreground">{report.villages?.name}</p>
+                    <p className="text-sm font-medium text-foreground">{sanitizeLocationName(report.villages?.name)}</p>
                     <p className="text-xs text-muted-foreground">{report.cases_count} cases • {Array.isArray(report.symptoms) ? report.symptoms.slice(0, 2).join(', ') : ''}</p>
                   </div>
                   <div className="text-right">

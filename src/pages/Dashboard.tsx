@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUserRole } from "@/hooks/useUserRole";
 import { db } from "@/utils/db";
 import { useTranslation } from "react-i18next";
+import { sanitizeLocationName } from "@/utils/sanitizeLocation";
 
 import { 
   Droplet, AlertTriangle, Users, Activity, Shield, Award, 
@@ -102,7 +103,7 @@ const AdminDashboard = ({
             </SelectTrigger>
             <SelectContent>
               {villages.map((v: any) => (
-                <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
+                <SelectItem key={v.id} value={v.id}>{sanitizeLocationName(v.name)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -379,7 +380,7 @@ const HealthOfficerDashboard = ({
             </SelectTrigger>
             <SelectContent>
               {villages.map((v: any) => (
-                <SelectItem key={v.id} value={v.id}>{v.name}</SelectItem>
+                <SelectItem key={v.id} value={v.id}>{sanitizeLocationName(v.name)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -706,7 +707,7 @@ const ASHAWorkerDashboard = ({ allVillages, selectedVillage, setSelectedVillage,
                     className="w-full h-10 px-3 border border-border bg-background rounded-xl text-xs"
                   >
                     {allVillages.map((v: any) => (
-                      <option key={v.id} value={v.id}>{v.name}</option>
+                      <option key={v.id} value={v.id}>{sanitizeLocationName(v.name)}</option>
                     ))}
                   </select>
                 </div>
@@ -929,7 +930,7 @@ const VolunteerDashboard = ({ allVillages, selectedVillage, setSelectedVillage, 
                     className="w-full h-10 px-3 border border-border bg-background rounded-xl text-xs"
                   >
                     {allVillages.map((v: any) => (
-                      <option key={v.id} value={v.id}>{v.name}</option>
+                      <option key={v.id} value={v.id}>{sanitizeLocationName(v.name)}</option>
                     ))}
                   </select>
                 </div>

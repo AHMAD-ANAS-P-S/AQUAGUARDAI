@@ -9,6 +9,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { WaterQualityChart } from "@/components/dashboard/WaterQualityChart";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
+import { sanitizeLocationName, formatTDS, syncLocationToSupabase, evaluateWaterRisk } from "@/utils/sanitizeLocation";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -115,6 +116,7 @@ const IoTMonitoring = () => {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    syncLocationToSupabase();
     loadDevices();
     loadPredictions();
     loadLatestReadings();
@@ -170,31 +172,25 @@ const IoTMonitoring = () => {
     return 'bg-yellow-500';
   };
 
-  const determineWaterStatus = (ph: number, tds: number, turbidity: number) => {
-    if (ph < 6.5 || ph > 8.5 || tds > 500 || turbidity > 4.0) return "critical";
-    if (ph < 6.8 || ph > 8.2 || tds > 300 || turbidity > 1.0) return "warning";
-    return "normal";
-  };
-
   const getReadingStatus = (reading: any) => {
-    const statusVal = reading.status || determineWaterStatus(reading.ph, reading.tds, reading.turbidity);
+    const evaluation = evaluateWaterRisk(reading.ph, reading.tds, reading.turbidity);
 
-    switch (statusVal) {
+    switch (evaluation.status) {
         case "critical":
             return {
-                label: "🔴 Critical",
-                cls: "text-red-500"
+                label: "🔴 Critical (High Risk)",
+                cls: "text-red-500 font-bold"
             };
         case "warning":
             return {
                 label: "🟡 Warning",
-                cls: "text-yellow-500"
+                cls: "text-yellow-500 font-semibold"
             };
         case "normal":
         default:
             return {
-                label: "🟢 Normal",
-                cls: "text-green-500"
+                label: "🟢 Normal (Safe)",
+                cls: "text-green-500 font-semibold"
             };
     }
   };
@@ -258,15 +254,15 @@ const IoTMonitoring = () => {
                       <div key={r.id} className="p-3 rounded-xl border border-border hover:bg-muted/30 transition-colors">
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <p className="text-sm font-semibold text-foreground">{r.sensor_id || r.villages?.name || 'Sensor'}</p>
-                            <p className="text-xs text-muted-foreground">{r.villages?.name}</p>
+                            <p className="text-sm font-semibold text-foreground">{r.sensor_id || sanitizeLocationName(r.villages?.name)}</p>
+                            <p className="text-xs text-muted-foreground">{sanitizeLocationName(r.villages?.name)}</p>
                           </div>
                           <span className={`text-xs font-semibold ${status.cls}`}>{status.label}</span>
                         </div>
                         <div className="grid grid-cols-4 gap-2 text-center">
                           {[
                             { label: t('iotPh', 'pH'), value: r.ph?.toFixed(1) ?? '-' },
-                            { label: t('iotTds', 'TDS'), value: r.tds ? `${r.tds}` : '-' },
+                            { label: t('iotTds', 'TDS'), value: formatTDS(r.tds) },
                             { label: t('iotTurbidity', 'Turbidity'), value: r.turbidity?.toFixed(1) ?? '-' },
                             { label: t('iotTemp', 'Temp'), value: r.temperature ? `${r.temperature}°` : '-' },
                           ].map((m, i) => (
@@ -310,7 +306,7 @@ const IoTMonitoring = () => {
                               <Badge variant="outline">{device.device_type}</Badge>
                             </div>
                             <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{device.villages?.name || device.location_name || 'Unknown'}</span>
+                              <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{sanitizeLocationName(device.villages?.name || device.location_name)}</span>
                               <span className="flex items-center gap-1">{device.communication_mode === 'wifi' ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}{device.communication_mode}</span>
                               <span className="flex items-center gap-1">{device.battery_level < 20 ? <BatteryLow className="h-3 w-3 text-red-500" /> : <Battery className="h-3 w-3 text-green-500" />}{device.battery_level}%</span>
                             </div>
@@ -447,7 +443,7 @@ const IoTMonitoring = () => {
                   <div key={p.id} className="border border-border rounded-xl p-4 hover:bg-muted/30 transition-colors">
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <span className="text-sm font-semibold text-foreground">{p.villages?.name || 'Unknown Village'}</span>
+                        <span className="text-sm font-semibold text-foreground">{sanitizeLocationName(p.villages?.name)}</span>
                         <p className="text-xs text-muted-foreground">{p.prediction_type}</p>
                       </div>
                       <Badge variant="outline" className="text-xs">

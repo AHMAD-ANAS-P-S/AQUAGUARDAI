@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { AlertCircle } from 'lucide-react';
+import { sanitizeAlertTitle, sanitizeAlertMessage } from '@/utils/sanitizeLocation';
 
 export const RealtimeNotifications = () => {
   const { toast } = useToast();
@@ -42,10 +43,13 @@ export const RealtimeNotifications = () => {
             console.error('Error playing alert sound:', error);
           }
 
+          const cleanTitle = sanitizeAlertTitle(alert.title);
+          const cleanMessage = sanitizeAlertMessage(alert.message);
+
           // Show browser notification
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Critical Water Quality Alert', {
-              body: `${alert.title} - ${alert.message}`,
+              body: `${cleanTitle} - ${cleanMessage}`,
               icon: '/icon-192x192.png',
               badge: '/icon-192x192.png',
               tag: alert.id,
@@ -56,7 +60,7 @@ export const RealtimeNotifications = () => {
           // Show toast notification
           toast({
             title: `${t('critical')} Alert`,
-            description: `${alert.title}: ${alert.message}`,
+            description: `${cleanTitle}: ${cleanMessage}`,
             variant: 'destructive',
             duration: 10000,
           });
@@ -67,7 +71,7 @@ export const RealtimeNotifications = () => {
             if ((registration as any).pushManager) {
               try {
                 await registration.showNotification('Critical Water Quality Alert', {
-                  body: `${alert.title} - ${alert.message}`,
+                  body: `${cleanTitle} - ${cleanMessage}`,
                   icon: '/icon-192x192.png',
                   badge: '/icon-192x192.png',
                   tag: alert.id,
